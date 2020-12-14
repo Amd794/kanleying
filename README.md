@@ -27,7 +27,13 @@ node init
 python kanleying.py   
 `
    
-7. 按照提示输入漫画地址即可
+7. 按照提示输入漫画地址即可，例如：
+`
+https://ac.qq.com/Comic/comicInfo/id/649185
+https://m.happymh.com/manga/douluodalu
+http://www.pufei8.com/manhua/7/
+https://www.kanman.com/107682/
+`
 
 ### 说明
 文件中有4个辅助文件
