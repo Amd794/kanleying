@@ -16,6 +16,7 @@ pip install -r requirements.txt
 `
    
 4. 安装node依赖, cd 到js目录。部分网站需要aes解密。
+   如果不下载这部分网站（腾讯动漫，沫沫漫画，coco漫画， 嗨皮漫画等），可以不用安装
 `
 node init   
 `
