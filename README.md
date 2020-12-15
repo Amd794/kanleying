@@ -15,7 +15,7 @@ cd kanleying
 pip install -r requirements.txt   
 `
    
-4. 安装node依赖, cd 到js目录
+4. 安装node依赖, cd 到js目录。部分网站需要aes解密。
 `
 node init   
 `
