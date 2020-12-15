@@ -390,10 +390,11 @@ def main():
             index = re.findall('\d+', ipt)
             print(f'char:{char}  index:{index}')
             chars = {
-                '+': 'detail_dicts[int(index[0]):]',
-                '/': 'detail_dicts[int(index[0]): int(index[1])]',
-                '-': 'detail_dicts[int(index[0])-2::-1],',
-                '*': str([detail_dicts[i - 1] for i in list(map(int, index))]),
+                # 直接回车 下载最新章节，0 下载全部章节
+                '+': 'detail_dicts[int(index[0]):]', # 2+， 下载第二章往后的所有
+                '/': 'detail_dicts[int(index[0]): int(index[1])]', # 2/6， 下载第二章到第6章节
+                '-': 'detail_dicts[int(index[0])-2::-1],', # 6- ， 下载第六章往下所有
+                '*': str([detail_dicts[i - 1] for i in list(map(int, index))]), # 3*6*10 下载第三，第六，第九章节
             }
 
             if char:

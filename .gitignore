@@ -149,4 +149,7 @@ js/node_modules
 site/kanman_com.py
 site/manhuatai_com.py
 site/pay_ac_qq_com.py
+site/pay_ac_qq_com.ini
+site/qq_com.env
+
 
