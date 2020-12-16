@@ -15,7 +15,7 @@ cd kanleying
 pip install -r requirements.txt   
 `
    
-4. 安装node依赖, cd 到js目录。部分网站需要aes解密。
+4. 安装node依赖, cd 到js目录。由于部分网站对返回的数据进行了加密，
    如果不下载这部分网站（腾讯动漫，沫沫漫画，coco漫画， 嗨皮漫画等），可以不用安装
 `
 node init   
@@ -44,7 +44,9 @@ chars = {
     '*': str([detail_dicts[i - 1] for i in list(map(int, index))]), # 3*6*10 下载第三，第六，第九章节
 }
 ```
-
+### 运行结果预览
+![avatar](https://image.amd794.com/17e1a5ff8b667bb1e1fb4d436670e6c1.png@blog)
+![avatar](https://image.amd794.com/a75fd7ecea6f425b610e66321098d095.png@blog)
 ### 说明
 文件中有4个辅助文件
 - try_to_fix.py 可以修复pdf、压缩包、图片
