@@ -23,4 +23,6 @@ class CoCoManHua(object):
 
 
 if __name__ == '__main__':
-    print(CoCoManHua._cocomanhua('https://www.cocomanhua.com/11701/1/188.html'))
+    import os
+    os.chdir('../')
+    print(CoCoManHua._cocomanhua('https://www.cocomanhua.com/11749/1/233.html'))
