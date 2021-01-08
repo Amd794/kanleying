@@ -60,6 +60,7 @@ class Util(object):
         chapter_num = len(chapters)
         imgs_html = ''
         lis_html = ''
+        # 渲染需求比较大， 可以引入类似Django Template 的模板引擎
         for img in imgs:
             imgs_html += f'<img src="{img}" alt="" style="width: 100%">\n'
         for li in range(chapter_num):
@@ -105,7 +106,7 @@ class Util(object):
             special_chars： str
         """
         for ch in special_chars:
-            s = s.replace(ch, output)  # 去除特殊字符并转换为简体中文
+            s = s.replace(ch, output)
         return convert(s, 'zh-hans')
 
 
@@ -128,7 +129,10 @@ class Comic(Util):
         if not rule: raise KeyError(f'{host_url}---->该网站还没有适配')
 
         if Comic.current_host_key == 'kanman':
-            from kanman_com import Kanman
+            try:
+                from kanman_com import Kanman
+            except ImportError as e:
+                print('由于某些原因，该文件不上传', e)
             return Kanman._kanman(url)
 
         if Comic.current_host_key == 'happymh':
@@ -258,8 +262,10 @@ class Comic(Util):
             '36mh': feifan_data_type,
             'mh1234': feifan_data_type,
         }
-
-        exec(mod.get(Comic.current_host_key, ''))
+        try:
+            exec(mod.get(Comic.current_host_key, ''))
+        except ImportError as e:
+            print('由于某些原因，该文件不上传', e)
         images_url = eval(data.get(Comic.current_host_key, '[]'))
         if images_url:
             return {'images_url': images_url, 'chapter': chapter, 'comic_title': comic_title}
