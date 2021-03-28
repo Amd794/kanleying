@@ -60,7 +60,6 @@ class Util(object):
         chapter_num = len(chapters)
         imgs_html = ''
         lis_html = ''
-        # 渲染需求比较大， 可以引入类似Django Template 的模板引擎
         for img in imgs:
             imgs_html += f'<img src="{img}" alt="" style="width: 100%">\n'
         for li in range(chapter_num):
@@ -106,7 +105,7 @@ class Util(object):
             special_chars： str
         """
         for ch in special_chars:
-            s = s.replace(ch, output)
+            s = s.replace(ch, output)  # 去除特殊字符并转换为简体中文
         return convert(s, 'zh-hans')
 
 
@@ -126,13 +125,10 @@ class Comic(Util):
         pq = pyquery.PyQuery(response.text)
         Comic.current_host_key = host_key
         rule = settings.pc_rules_dict.get(host_key, '')
-        if not rule: raise KeyError(f'{host_url}---->该网站还没有适配')
+        if not rule: raise KeyError(f'{host_url}---->请先在setting文件配置改网站')
 
         if Comic.current_host_key == 'kanman':
-            try:
-                from kanman_com import Kanman
-            except ImportError as e:
-                print('由于某些原因，该文件不上传', e)
+            from kanman_com import Kanman
             return Kanman._kanman(url)
 
         if Comic.current_host_key == 'happymh':
@@ -158,9 +154,9 @@ class Comic(Util):
             comic_title = pq(rule.get('comic_title')).text()
             if '最终话' in Comic.exclude_character(comic_title):
                 comic_title = Comic.exclude_character(comic_title + '（完结）')
-            if Comic.current_host_key == '18comic':
+            if Comic.current_host_key == '18comic2':
                 comic_title = comic_title[(len(comic_title) // 2) + 1:]
-            if Comic.current_host_key == '18comic':
+            if Comic.current_host_key == '18comic2':
                 if not lis.length:
                     detail_dict = {
                         'chapter': '共一话',
@@ -196,7 +192,7 @@ class Comic(Util):
             for i in range(2, total_pages + 1):
                 detail_one_page(url + f'&page={i}')
             Comic.detail_dicts.reverse()
-        if Comic.current_host_key == '18comic':
+        if Comic.current_host_key == '18comic2':
             try:
                 if len(Comic.detail_dicts[0]['chapter']) > len(Comic.detail_dicts[1]['chapter']):
                     Comic.detail_dicts[0]['chapter'] = Comic.detail_dicts[0]['chapter'].replace(
@@ -262,10 +258,8 @@ class Comic(Util):
             '36mh': feifan_data_type,
             'mh1234': feifan_data_type,
         }
-        try:
-            exec(mod.get(Comic.current_host_key, ''))
-        except ImportError as e:
-            print('由于某些原因，该文件不上传', e)
+
+        exec(mod.get(Comic.current_host_key, ''))
         images_url = eval(data.get(Comic.current_host_key, '[]'))
         if images_url:
             return {'images_url': images_url, 'chapter': chapter, 'comic_title': comic_title}
@@ -298,7 +292,7 @@ class Comic(Util):
             # 获取分页数
             pages = len(pq('.selectpage option'))
             images_url.extend(Mm820._mm820(detail_url, pages))
-        if Comic.current_host_key == '18comic':
+        if Comic.current_host_key == '18comic2':
             images_url = [img for img in images_url if img]  # 排除空元素
             images_url = [img for img in images_url if not img.startswith('/static/')]
             if len(images_url) > 499:
@@ -365,10 +359,12 @@ class Comic(Util):
 
 
 def main():
-    while True:
-        url = input('漫画地址:').strip()
-        if url == 'q':
-            break
+    def run(detail_dict, chapters):
+        # print(detail_dict)
+        images_dict = Comic.get_images_url(detail_dict)
+        Comic.download_images(images_dict, chapters)
+
+    def get_mh_info(url):
         try:
             host_key = re.match('https?://\w+\.(.*?)\.\w+/', url).group(1)  # kanleying
             host_url = re.match('https?://\w+\.(.*?)\.\w+/', url).group()  # https://www.kanleying.com/
@@ -380,43 +376,53 @@ def main():
         detail_dicts = Comic.get_detail_dicts(url, host_url, host_key)
         chapters = [detail_dict['chapter'] for detail_dict in detail_dicts]
         print(f'该漫画共{len(chapters)}章节')
+        return detail_dicts, chapters
 
-        def run(detail_dict):
-            # print(detail_dict)
-            images_dict = Comic.get_images_url(detail_dict)
-            Comic.download_images(images_dict, chapters)
+    while True:
+        url = input('漫画地址:').strip()
+        if url == 'q':
+            break
+        try:
+            if isinstance(eval(url), list):
+                for url in eval(url):
+                    Comic.detail_dicts = []  # 清理缓存记录
+                    detail_dicts, chapters = get_mh_info(url)
+                    run(detail_dicts.pop(), chapters)
+                return
+        except SyntaxError:
+            pass
+        detail_dicts, chapters = get_mh_info(url)
 
         while True:
             ipt = input('>>>:')
             if ipt == 'q':
-                # 清空一下残留数据
+                # 清空一下缓存
                 Comic.detail_dicts = []
                 break
             char = re.findall('\D+', ipt)
             index = re.findall('\d+', ipt)
             print(f'char:{char}  index:{index}')
             chars = {
-                # 直接回车 下载最新章节，0 下载全部章节
-                '+': 'detail_dicts[int(index[0]):]', # 2+， 下载第二章往后的所有
-                '/': 'detail_dicts[int(index[0]): int(index[1])]', # 2/6， 下载第二章到第6章节
-                '-': 'detail_dicts[int(index[0])-2::-1],', # 6- ， 下载第六章往下所有
-                '*': str([detail_dicts[i - 1] for i in list(map(int, index))]), # 3*6*10 下载第三，第六，第九章节
+                '+': 'detail_dicts[int(index[0]):]',
+                '/': 'detail_dicts[int(index[0]): int(index[1])]',
+                '-': 'detail_dicts[int(index[0])-2::-1],',
+                '*': str([detail_dicts[i - 1] for i in list(map(int, index))]),
             }
 
             if char:
                 d = chars.get(char[0], '不存在')
                 print(d)
                 for detail_dict in eval(d):
-                    run(detail_dict)
+                    run(detail_dict, chapters)
             else:
                 if index:
                     if index == ['0']:
                         for detail_dict in detail_dicts:
-                            run(detail_dict)
+                            run(detail_dict, chapters)
                     else:
-                        run(detail_dicts[int(index[0]) - 1])
+                        run(detail_dicts[int(index[0]) - 1], chapters)
                 else:
-                    run(detail_dicts.pop())
+                    run(detail_dicts.pop(), chapters)
 
 
 if __name__ == '__main__':
