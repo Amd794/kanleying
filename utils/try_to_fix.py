@@ -43,14 +43,23 @@ def make_pdf(pdf_name, file_list):
 
 
 def get_response(url: str, max_count: int = 3, timeout: int = 25,
-                 encoding: str = 'utf-8', name: str = '',) -> object:
+                 encoding: str = 'utf-8', name: str = '', ) -> object:
+    if 'qinqinmh' in url:
+        referer = 'https://www.qinqinmh.com/'
+    else:
+        referer = url
     headers = {
         'user-agent': 'Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.67 Mobile Safari/537.36 Edg/87.0.664.47',
+
+        'referer': referer,
+        # 不缓存
+        'cache-control': 'no-cache',
+        'pragma': 'no-cache',
     }
     count = 0
     while count < max_count:
         try:
-            response = requests.get(url=url, headers=headers, verify=True, timeout=timeout, )
+            response = requests.get(url=url, headers=headers, verify=False, timeout=timeout)
             response.raise_for_status()  # 如果status_code不是200,产生异常requests.HTTPError
             response.encoding = encoding
             return response
@@ -68,7 +77,7 @@ def try_download_error_img(error_file):
         images_url = f.read().split('\n')
         images_url = [i for i in images_url if i != '']
     for image_url in images_url:
-        image_url, name = image_url.split(' ')
+        image_url, name = image_url.rsplit(' ', 1)
 
         response = get_response(image_url, timeout=60)
         with open(name, 'wb') as f:
@@ -113,8 +122,16 @@ def compress(target, source, pwd='', delete_source=False, ):
 
 def f(sl):
     try:
-        return int(re.findall('\d+', sl)[0])
+        return list(map(int, re.findall('(\d+)', sl)))
     except IndexError:
+        if '最终' in sl:
+            return 888
+        elif '后记' in sl:
+            return 999
+        elif '序章' in sl:
+            return -1
+        elif 'Preview' in sl:
+            return -2
         return 999
 
 
@@ -142,6 +159,7 @@ if __name__ == '__main__':
     file_list = ['./' + str(imgFileName) for imgFileName in os.listdir('.') if imgFileName.endswith(tuple(suffix))]
     file_list.sort(key=f)
     print(file_list)
-    make_pdf(file_name + '.pdf', file_list)
-    print(file_name + '-重构' + '.pdf' + '---->successful')
-    # compress(f'{file_name}.rar', '*', file_name)
+    if ['./' + str(imgFileName) for imgFileName in os.listdir('.') if imgFileName.endswith(tuple(['.pdf']))]:
+        make_pdf(file_name + '.pdf', file_list)
+        print(file_name + '-重构' + '.pdf' + '---->successful')
+        # compress(f'{file_name}.rar', '*', file_name)

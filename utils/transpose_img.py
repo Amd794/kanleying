@@ -25,7 +25,7 @@ if __name__ == '__main__':
         transpose_img(file)
 
     from shutil import copyfile
-    copyfile('C:/Users/29522/Desktop/Project/PyCharm/Python_fullstack/5. 网络爬虫/韩漫/try_to_fix.py',
+    copyfile(r'C:\Users\29522\Desktop\Project\5. 网络爬虫\韩漫/try_to_fix.py',
              os.path.join('./', 'try_to_fix.py'))
     os.system("python try_to_fix.py")
     os.remove(__file__)

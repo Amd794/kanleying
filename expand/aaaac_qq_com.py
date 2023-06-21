@@ -4,7 +4,7 @@ import re
 import requests
 from pyquery import PyQuery
 
-from kanleying import Comic
+from bin.run import Comic
 
 
 def get_info(detail_url):
@@ -14,7 +14,7 @@ def get_info(detail_url):
     try:
         res = requests.get(detail_url, headers=headers).text
         print(res)
-        nonce = re.findall('window\["n.*?e"\]\s=\s(.*?);', res)[1]
+        nonce = re.findall('window\["n.*?e"\]\s=\s(.*?);', res)[0]
         data = re.findall('var DATA.*?\'(.*?)\'', res)[0]
         chapter = re.findall('title-comicHeading\">(.*?)<', res)[0].replace(' ', '')
         chapters = PyQuery(res)('#catalogueList li .tool_chapters_list_title').text().split()

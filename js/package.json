@@ -1,7 +1,7 @@
 {
-  "name": "comic_spider",
+  "name": "js",
   "version": "1.0.0",
-  "description": "漫画爬虫依赖的第三方环境开发包",
+  "description": "",
   "main": "",
   "dependencies": {
     "crypto-js": "^4.0.0",
@@ -11,6 +11,6 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "Amd794",
+  "author": "",
   "license": "ISC"
 }

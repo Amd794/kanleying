@@ -23,7 +23,7 @@ def f(s):
 suffix = ['jpg', 'png', 'jpeg']
 page = 5
 file_list = [imgFileName for imgFileName in os.listdir('.') if
-             imgFileName.endswith(tuple(suffix)) and '_w_144' in imgFileName]
+             imgFileName.endswith(tuple(suffix))]
 file_list.sort(key=f)
 file_groups = [[x for x in file_list][i:i + page] for i in range(0, len(file_list), page)]
 file_name = ''
@@ -43,13 +43,14 @@ for group in file_groups:
 for i in file_list:
     try:
         os.remove(i)
+        print()
     except PermissionError:
         print(f'-----{i} PermissionError-----')
 
 with open('error_urls.txt', 'w') as fw:
     fw.close()
 
-copyfile('C:/Users/29522/Desktop/Project/PyCharm/Python_fullstack/5. 网络爬虫/韩漫/try_to_fix.py',
+copyfile(r'C:\Users\29522\Desktop\Project\5. 网络爬虫/韩漫/try_to_fix.py',
          os.path.join('./', 'try_to_fix.py'))
 os.system("python try_to_fix.py")
 os.remove(__file__)

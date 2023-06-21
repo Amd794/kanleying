@@ -139,20 +139,8 @@ dmypy.json
 
 # Cython debug symbols
 cython_debug/
-kanleying
 test
-threading_download_images
 error_urls.txt
 js/node_modules
 .idea
-# 不上传看漫画 腾讯动漫和漫画台等收费章节文件
-site/kanman_com.py
-site/manhuatai_com.py
-site/pay_ac_qq_com.py
-site/pay_ac_qq_com.ini
-site/qq_com.env
-site/qq_com.session
-site/qq_com.dat
-site/一键启动.bat
-
 
