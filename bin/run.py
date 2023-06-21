@@ -25,6 +25,7 @@ class Comic:
         """
         same_site = [
             settings.qinqinmh_website,
+            settings.mh1234_website,
         ]
         self.host_key = next(
             filter(

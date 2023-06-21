@@ -20,7 +20,7 @@ EXECUTABLE = r'C:/Sorfwares/WinRAR/WinRAR.exe'
 # 同一个系统可能部署了n个网站，这些漫画的key会被重制为列表第一个
 qinqinmh_website = ['qinqinmh', 'nonomh', 'wzdhm', 'xuxumh', 'jjmhw', 'ikanmh', '91comic', 'mxshm', '592mh', '592hm',
                     '52wxz']
-
+mh1234_website = ['mh1234', 'iemou', 'imoemh']
 # 配置使用pc UserAgent的网站,默认使用的是手机端ua
 use_pc_ua = [
     'qq',
