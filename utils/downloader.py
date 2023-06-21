@@ -100,7 +100,6 @@ def handle_lnk(src_lnk: str):
     # todo 处理源链接
     """
     lnk_obj = {
-        'ikanmh.top': src_lnk.replace('http', 'https'),
     }
     for key in lnk_obj:
         if key in src_lnk:

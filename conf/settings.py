@@ -21,7 +21,7 @@ EXECUTABLE = r'C:/Sorfwares/WinRAR/WinRAR.exe'
 qinqinmh_website = ['qinqinmh', 'nonomh', 'wzdhm', 'xuxumh', 'jjmhw', 'ikanmh', '91comic', 'mxshm', '592mh', '592hm',
                     '52wxz']
 mh1234_website = ['mh1234', 'iemou', 'imoemh']
-# 配置使用pc UserAgent的网站,默认使用的是手机端ua
+# 配置使用pc UserAgent的网站,默认使用的是手机端ua 有点尴尬，太久没维护了
 use_pc_ua = [
     'qq',
 ]
