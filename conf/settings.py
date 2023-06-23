@@ -24,6 +24,7 @@ mh1234_website = ['mh1234', 'iemou', 'imoemh']
 # 配置使用pc UserAgent的网站,默认使用的是手机端ua 有点尴尬，太久没维护了
 use_pc_ua = [
     'qq',
+    'mhua5',
 ]
 # 特效符号处理，替换成全角
 special_chars = {
