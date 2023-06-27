@@ -25,6 +25,7 @@ mh1234_website = ['mh1234', 'iemou', 'imoemh']
 use_pc_ua = [
     'qq',
     'mhua5',
+    'tfvisa',
 ]
 # 特效符号处理，替换成全角
 special_chars = {

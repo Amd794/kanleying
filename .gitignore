@@ -143,4 +143,5 @@ test
 error_urls.txt
 js/node_modules
 .idea
+bin/chapters_info.json
 
