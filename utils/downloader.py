@@ -109,7 +109,7 @@ def handle_lnk(src_lnk: str):
 
 
 def get_response(url: str, error_file_path: str = '.', max_count: int = 3, timeout: int = 60,
-                 encoding: str = 'utf-8', name: str = '', header=None) -> object:
+                 encoding: str = 'utf-8', name: str = '', header=None, *args, **kwargs) -> object:
     """
     #   todo 获取返回的response
     """
@@ -125,6 +125,7 @@ def get_response(url: str, error_file_path: str = '.', max_count: int = 3, timeo
                                     timeout=timeout,
                                     # proxies={
                                     #     "https": f"http://{proxy}", }
+                                    *args, **kwargs
                                     )
             response.raise_for_status()  # 如果status_code不是200, 产生异常requests .HTTPError
             response.encoding = encoding
